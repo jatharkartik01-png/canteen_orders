@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skip_theQueue - Canteen Portal</title>
+
+    <link rel="stylesheet" href="static/css/login.css">
+</head>
+
+<body>
+
+    <div class="mobile-container">
+
+        <div class="header">
+            <img src="/static/images/new-logo.webp" alt="Western College Logo">
+
+            <h1>Canteen Portal</h1>
+            <p>Log in to order your meals</p>
+        </div>
+
+        <form class="login-form" action="/login" method="POST">
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="student@westerncollege.edu"
+                    required
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required
+                >
+            </div>
+
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn-login">
+                Sign In
+            </button>
+
+        </form>
+
+        <div class="register-section">
+            <p>
+                Don't have an account?
+                <a href="/register">Register Now</a>
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>

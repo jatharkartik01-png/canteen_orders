@@ -1,0 +1,15 @@
+[project]
+name = "my-fastapi-app"
+version = "0.1.0"
+description = "A FastAPI application managed with uv"
+readme = "README.md"
+requires-python = ">=3.11.0"
+dependencies = [
+    "fastapi[all]>=0.110.0",
+    "itsdangerous>=2.2.0",
+    "jinja2>=3.1.6",
+    "pwdlib[argon2]>=0.3.1",
+    "python-multipart>=0.0.32",
+    "sqlalchemy>=2.0.52",
+    "uvicorn>=0.52.4",
+]

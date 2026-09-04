@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skip_theQueue - Create Account</title>
+    <link rel="stylesheet" href="/static/css/register.css">
+</head>
+<body>
+
+    <div class="mobile-container">
+        
+        <div class="header">
+            <img src="/static/images/new-logo.webp" alt="Western College Logo">
+            <h1>Join Skip_theQueue</h1>
+            <p>Create an account to start ordering</p>
+        </div>
+
+        <form class="login-form" action="/register" method="POST">
+            <div class="input-group">
+                <label for="username">Full Name</label>
+                <input type="text" id="username" name="username" placeholder="Kartik Jathar" required>
+            </div>
+
+            <div class="input-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="9876543210" pattern="[0-9]{10}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="student@westerncollege.edu" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-login">Create Account</button>
+        </form>
+
+        <div class="register-section">
+            <p>Already have an account? <a href="/">Sign In</a></p>
+        </div>
+
+    </div>
+
+</body>
+</html>
