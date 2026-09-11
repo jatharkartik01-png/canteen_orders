@@ -1,0 +1,21 @@
+{
+  "name": "Wescafe Canteen",
+  "short_name": "Wescafe",
+  "description": "Skip the queue and order food easily.",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#F6A820",
+  "icons": [
+    {
+      "src": "/static/images/new-logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "/static/images/new-logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}

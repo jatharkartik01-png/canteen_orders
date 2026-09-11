@@ -41,7 +41,10 @@ class User(Base):
     orders: Mapped[List["Order"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
-
+    
+    # Password Reset Fields (Using SQLAlchemy 2.0 Mapped style)
+    reset_token: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    reset_token_expires: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
 class Menu(Base):
     __tablename__ = "menu"
@@ -50,7 +53,6 @@ class Menu(Base):
     item_name: Mapped[str] = mapped_column(String(255), index=True)
     dietary_preference: Mapped[DietaryPreference]
     item_price: Mapped[Decimal] = mapped_column(Numeric(10, 2))
-    
     
     is_available: Mapped[bool] = mapped_column(
         default=True, server_default=text("true"), index=True
@@ -63,9 +65,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     order_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    
     user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id"), index=True)
-    
     
     status: Mapped[OrderStatus] = mapped_column(
         default=OrderStatus.PENDING, index=True
@@ -75,7 +75,6 @@ class Order(Base):
     )
 
     user: Mapped["User"] = relationship(back_populates="orders")
-    
     order_items: Mapped[List["OrderItem"]] = relationship(
         back_populates="order", cascade="all, delete-orphan"
     )

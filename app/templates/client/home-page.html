@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#F6A820">
+<link rel="apple-touch-icon" href="/static/images/new-logo.webp">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wescafe - Canteen Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #050505; color: #FFFFFF; font-family: 'Roboto', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100dvh; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        .app-screen { width: 100%; max-width: 420px; height: 100dvh; max-height: 880px; background-color: #000000; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08); border-radius: 40px; }
+        @media (max-width: 480px), (max-height: 800px) { body { background-color: #000000; } .app-screen { max-width: 100%; height: 100dvh; max-height: none; border-radius: 0; box-shadow: none; border: none; } }
+        
+        .app-header { text-align: center; padding: 30px 20px 15px; flex-shrink: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 10; }
+        .brand-tag { font-size: 10px; color: #F6A820; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 4px; }
+        .brand-title { font-family: 'Roboto', sans-serif; font-size: 28px; font-weight: 400; letter-spacing: 1px; }
+        
+        .content-area { flex-grow: 1; overflow-y: auto; padding: 20px 24px 100px; scroll-behavior: smooth; }
+        .tab-content { display: none; animation: fadeIn 0.25s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; color: #FFFFFF; }
+        .input-group { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+        .input-field { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .field-label { font-size: 12px; color: #A0A0A0; font-weight: 500; letter-spacing: 0.5px; }
+        input { width: 100%; height: 52px; padding: 0 18px; background: #121212; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; color: #FFFFFF; font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s ease, background 0.2s ease; }
+        input:focus { border-color: #F6A820; background: #181818; box-shadow: 0 0 12px rgba(246, 168, 32, 0.12); }
+        
+        .btn-amber-pill { width: 100%; height: 52px; background-color: #F6A820; color: #000000; border: none; border-radius: 28px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: transform 0.1s ease, background-color 0.2s ease; box-shadow: 0 8px 20px rgba(246, 168, 32, 0.2); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-amber-pill:active { transform: scale(0.98); }
+        .btn-secondary-outline { width: 100%; height: 52px; background-color: transparent; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 28px; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; }
+        .btn-secondary-outline:hover { border-color: #F6A820; color: #F6A820; background: rgba(246, 168, 32, 0.05); }
+        
+        .profile-avatar-card { display: flex; align-items: center; gap: 16px; padding: 16px; background: #121212; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; margin-bottom: 24px; }
+        .avatar-circle { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #F6A820 0%, #B87300 100%); color: #000; font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .profile-info-text h3 { font-size: 16px; font-weight: 700; color: #FFF; }
+        .profile-info-text p { font-size: 12px; color: #888888; margin-top: 2px; }
+        
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 72px; background-color: #0D0D0D; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 100; backdrop-filter: blur(20px); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: none; border: none; color: #666666; cursor: pointer; padding: 8px 16px; transition: color 0.2s ease; width: 33.33%; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+        .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s ease, stroke 0.2s ease; }
+        .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
+        .nav-item.active { color: #F6A820; }
+        .nav-item.active svg { transform: translateY(-2px); stroke: #F6A820; }
+        
+        .cart-icon-wrapper { position: relative; }
+        .cart-badge { position: absolute; top: -4px; right: -8px; background-color: #F6A820; color: #000000; font-size: 10px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        .cart-item-row { display: flex; justify-content: space-between; align-items: center; background: #121212; padding: 12px 16px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
+        .cart-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .cart-item-name { font-size: 14px; font-weight: 600; color: #FFF; }
+        .cart-item-price { font-size: 12px; color: #F6A820; }
+    </style>
+</head>
+<body>
+    <div class="app-screen">
+        <header class="app-header">
+            <div class="brand-tag">WESCAFE • CANTEEN</div>
+            <h1 class="brand-title">Wescafe</h1>
+        </header>
+
+        <main class="content-area">
+
+            <!-- TAB 1: HOME PAGE -->
+            <section id="tab-home" class="tab-content active">
+                <h2 class="section-title">Menu & Specialties</h2>
+                
+                {% if menu_items %}
+                    {% for item in menu_items %}
+                    <div style="background: #121212; border-radius: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px; display: flex; gap: 14px; align-items: center;">
+                        <div style="flex-grow: 1;">
+                            <span style="font-size: 10px; color: #F6A820; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                                {{ item.dietary_preference.value }}
+                            </span>
+                            <h4 style="font-size: 15px; font-weight: 700; color: #FFFFFF; margin-top: 2px;">
+                                {{ item.item_name }}
+                            </h4>
+                            <p style="font-size: 13px; color: #A0A0A0; margin-top: 4px;">
+                                ₹{{ "%.2f"|format(item.item_price) }}
+                            </p>
+                        </div>
+                        <button class="btn-amber-pill" 
+                                onclick="addToCart({{ item.item_id }}, '{{ item.item_name | escape }}', {{ item.item_price }})" 
+                                style="width: auto; height: 38px; padding: 0 16px; font-size: 11px;">
+                            + ADD
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 40px 0; color: #666;">
+                        <p style="font-size: 14px;">No menu items currently available.</p>
+                    </div>
+                {% endif %}
+            </section>
+
+            <!-- TAB 2: CART PAGE -->
+            <section id="tab-cart" class="tab-content">
+                <h2 class="section-title">Your Order Cart</h2>
+                <div id="cart-container">
+                    <!-- Javascript will dynamically inject cart HTML here -->
+                </div>
+            </section>
+
+            <!-- TAB 3: PROFILE PAGE -->
+            <section id="tab-profile" class="tab-content">
+                <h2 class="section-title">Account Settings</h2>
+
+                {% if user %}
+                <div class="profile-avatar-card">
+                    <div class="avatar-circle">
+                        {{ user.username[0] | upper if user.username else 'U' }}
+                    </div>
+                    <div class="profile-info-text">
+                        <h3>{{ user.username }}</h3>
+                        <p>{{ user.user_email }}</p>
+                    </div>
+                </div>
+
+                <form action="/profile/update" method="POST" class="input-group">
+                    <div class="input-field">
+                        <span class="field-label">Full Name</span>
+                        <input type="text" name="name" value="{{ user.username or '' }}" placeholder="Enter full name" required>
+                    </div>
+                    <div class="input-field">
+                        <span class="field-label">Email Address</span>
+                        <input type="email" name="email" value="{{ user.user_email or '' }}" placeholder="Enter email address" required>
+                    </div>
+                    <div class="input-field">
+                        <span class="field-label">Mobile Number</span>
+                        <input type="tel" name="phone" value="{{ user.user_mobile or '' }}" placeholder="Enter mobile number">
+                    </div>
+                    <button type="submit" class="btn-amber-pill" style="margin-top: 8px;">
+                        SAVE CHANGES
+                    </button>
+                </form>
+
+                <div style="margin-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 24px;">
+                    <h3 style="font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 16px;">Security Settings</h3>
+                    <form action="/profile/change-password" method="POST" class="input-group">
+                        <div class="input-field">
+                            <span class="field-label">Current Password</span>
+                            <input type="password" name="current_password" placeholder="Enter current password" required>
+                        </div>
+                        <div class="input-field">
+                            <span class="field-label">New Password</span>
+                            <input type="password" name="new_password" placeholder="Enter new password" required>
+                        </div>
+                        <button type="submit" class="btn-secondary-outline">
+                            UPDATE PASSWORD
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 40px 0; color: #666;">
+                    <p style="font-size: 14px;">Please log in to view your profile details.</p>
+                </div>
+                {% endif %}
+
+                <!-- Fixed Href Route -->
+                <a href="/orders" style="text-decoration: none;">
+                    <button type="button" class="btn-secondary-outline">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 8v4l3 3"></path>
+                            <circle cx="12" cy="12" r="9"></circle>
+                        </svg>
+                        VIEW PAST ORDERS
+                    </button>
+                </a>
+
+                <a href="/logout" style="text-decoration: none; display: block;">
+                    <button type="button" class="btn-secondary-outline" style="border-color: rgba(255, 59, 48, 0.4); color: #ff3b30;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        LOG OUT
+                    </button>
+                </a>
+            </section>
+
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('home', this)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span class="nav-label">Home</span>
+            </button>
+
+            <button class="nav-item" onclick="switchTab('cart', this)">
+                <div class="cart-icon-wrapper">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cart-badge-count">0</span>
+                </div>
+                <span class="nav-label">Cart</span>
+            </button>
+
+            <button class="nav-item" onclick="switchTab('profile', this)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="nav-label">Profile</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Client-Side Tab & Functional Cart Storage Engine -->
+    <script>
+        let cart = JSON.parse(localStorage.getItem('wescafe_cart')) || [];
+
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabName).classList.add('active');
+            element.classList.add('active');
+            
+            if (tabName === 'cart') renderCart();
+        }
+
+        function updateCartBadge() {
+            let total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-badge-count').innerText = total;
+        }
+
+        function addToCart(id, name, price) {
+            let existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            localStorage.setItem('wescafe_cart', JSON.stringify(cart));
+            updateCartBadge();
+            
+            // Brief visual feedback overlay can be added here
+            alert(`${name} added to your cart!`);
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-container');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px 0; color: #666;">
+                        <svg style="width: 48px; height: 48px; stroke: #333; fill: none; stroke-width: 1.5; margin-bottom: 12px;" viewBox="0 0 24 24">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <p style="font-size: 14px;">Your cart is currently empty.</p>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                let itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                html += `
+                    <div class="cart-item-row">
+                        <div class="cart-item-info">
+                            <span class="cart-item-name">${item.name}</span>
+                            <span class="cart-item-price">Qty: ${item.quantity}</span>
+                        </div>
+                        <div style="font-size: 14px; font-weight: 600; color: #FFF;">
+                            ₹${itemTotal.toFixed(2)}
+                        </div>
+                    </div>`;
+            });
+
+            html += `<hr style="border-color: rgba(255,255,255,0.1); margin: 24px 0 16px;">`;
+            html += `
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size: 18px; color:#fff; margin-bottom: 24px;">
+                    <div>Total:</div>
+                    <div style="color: #F6A820;">₹${total.toFixed(2)}</div>
+                </div>`;
+            html += `<button class="btn-amber-pill" onclick="checkout()">CONFIRM & PLACE ORDER</button>`;
+            
+            container.innerHTML = html;
+        }
+
+        async function checkout() {
+            try {
+                const response = await fetch('/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cart: cart })
+                });
+
+                if (response.ok) {
+                    alert("Order placed successfully!");
+                    cart = [];
+                    localStorage.removeItem('wescafe_cart');
+                    updateCartBadge();
+                    window.location.href = "/orders"; 
+                } else {
+                    const data = await response.json();
+                    alert(data.error || "Failed to place order.");
+                }
+            } catch (error) {
+                console.error("Checkout Error:", error);
+                alert("Something went wrong processing your order.");
+            }
+        }
+
+        // Initialize state on load
+        document.addEventListener("DOMContentLoaded", () => {
+            updateCartBadge();
+        });
+    </script>
+    <script>
+    // Register the Service Worker to enable the "Install App" prompt
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/static/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful');
+                })
+                .catch(err => {
+                    console.error('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+</script>
+</body>
+</html>
